@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>PlantFit – iPhone 17 Mockup</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:linear-gradient(135deg,#0a0a0f 0%,#1a1020 50%,#0a0a0f 100%);
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:40px 24px;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text',sans-serif;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+.phone{
+  position:relative;width:393px;height:852px;flex-shrink:0;
+  background:linear-gradient(160deg,#1c1c1e 0%,#2a2a2e 40%,#1c1c1e 100%);
+  border-radius:54px;
+  box-shadow:0 0 0 1.5px #3a3a3e,0 0 0 3px #1a1a1c,0 0 0 4.5px #4a4a50,
+    0 30px 80px rgba(0,0,0,.75),0 10px 30px rgba(0,0,0,.5),
+    inset 0 1px 0 rgba(255,255,255,.08);
+  overflow:hidden;
+}
+.phone::before{content:'';position:absolute;inset:0;border-radius:54px;
+  background:linear-gradient(115deg,rgba(255,255,255,.07) 0%,rgba(255,255,255,.01) 30%,transparent 60%,rgba(255,255,255,.04) 100%);
+  pointer-events:none;z-index:10;}
+.screen{position:absolute;top:14px;left:14px;right:14px;bottom:14px;border-radius:42px;overflow:hidden;background:#000;}
+.island{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:122px;height:36px;background:#000;border-radius:20px;z-index:30;box-shadow:0 2px 8px rgba(0,0,0,.6);display:flex;align-items:center;justify-content:flex-end;padding-right:10px;}
+.island-cam{width:10px;height:10px;border-radius:50%;background:#1a1a1a;border:1.5px solid #2a2a2a;}
+.statusbar{position:absolute;top:0;left:0;right:0;height:58px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;z-index:25;pointer-events:none;}
+.home-bar{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:130px;height:5px;border-radius:3px;z-index:20;}
+.btn-vol-up{position:absolute;top:170px;left:-4px;width:4px;height:42px;background:#3a3a3e;border-radius:2px 0 0 2px;}
+.btn-vol-dn{position:absolute;top:224px;left:-4px;width:4px;height:42px;background:#3a3a3e;border-radius:2px 0 0 2px;}
+.btn-power{position:absolute;top:194px;right:-4px;width:4px;height:72px;background:#3a3a3e;border-radius:0 2px 2px 0;}
+.reflection{position:absolute;inset:0;border-radius:42px;pointer-events:none;z-index:5;background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 40%);}
+.phone-label{margin-top:16px;font-size:12px;color:rgba(255,255,255,.3);letter-spacing:.08em;}
+
+/* HOME SCREEN */
+.lockscreen{position:absolute;inset:0;border-radius:42px;overflow:hidden;
+  background:linear-gradient(160deg,#1a2a4a 0%,#2a1a3a 40%,#0a1a2a 100%);
+  display:flex;flex-direction:column;align-items:center;z-index:2;}
+.ls-wallpaper{position:absolute;inset:0;
+  background:radial-gradient(ellipse at 30% 40%,rgba(100,80,200,.3) 0%,transparent 60%),
+    radial-gradient(ellipse at 70% 70%,rgba(40,120,200,.2) 0%,transparent 50%),
+    radial-gradient(ellipse at 50% 20%,rgba(200,80,120,.15) 0%,transparent 40%);}
+.ls-time{font-size:72px;font-weight:100;color:#fff;margin-top:88px;letter-spacing:-3px;line-height:1;position:relative;}
+.ls-date{font-size:17px;color:rgba(255,255,255,.7);margin-top:6px;position:relative;}
+.home-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;padding:0 22px;margin-top:28px;width:100%;position:relative;}
+.app-icon{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;}
+.app-icon-img{width:56px;height:56px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.app-icon-lbl{font-size:10px;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.5);}
+.dock{position:absolute;bottom:36px;left:24px;right:24px;height:84px;
+  background:rgba(255,255,255,.18);backdrop-filter:blur(20px);border-radius:24px;
+  display:flex;align-items:center;justify-content:space-around;padding:0 18px;}
+.notif-wrap{position:absolute;top:68px;left:16px;right:16px;z-index:40;
+  animation:slideDown .5s cubic-bezier(.34,1.4,.64,1) both;}
+@keyframes slideDown{from{opacity:0;transform:translateY(-20px)}to{opacity:1;transform:translateY(0)}}
+.notif{background:rgba(255,255,255,.92);backdrop-filter:blur(24px);border-radius:18px;
+  padding:12px 14px;display:flex;gap:11px;align-items:flex-start;cursor:pointer;
+  box-shadow:0 4px 24px rgba(0,0,0,.3);transition:transform .1s;}
+.notif:active{transform:scale(.98);}
+.notif-app-icon{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#4a8a3a,#2d6a25);
+  display:flex;align-items:center;justify-content:font-size:18px;flex-shrink:0;align-items:center;justify-content:center;font-size:18px;}
+.notif-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;}
+.notif-app-name{font-size:12px;font-weight:600;color:#1c1c1e;}
+.notif-time{font-size:11px;color:#8e8e93;}
+.notif-title{font-size:13px;font-weight:700;color:#1c1c1e;}
+.notif-sub{font-size:12px;color:#3c3c3e;margin-top:1px;line-height:1.35;}
+
+/* APP SCREEN */
+.appscreen{position:absolute;inset:0;border-radius:42px;overflow:hidden;background:#ece2db;
+  z-index:3;opacity:0;pointer-events:none;transform:scale(1.04);
+  transition:opacity .35s ease,transform .35s ease;}
+.appscreen.visible{opacity:1;pointer-events:all;transform:scale(1);}
+.sticky-hdr{position:sticky;top:0;z-index:20;background:var(--card2);border-bottom:1px solid #e0cfc0;}
+.app-scroll{position:absolute;top:58px;left:0;right:0;bottom:22px;
+  overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.app-scroll::-webkit-scrollbar{display:none;}
+
+:root{
+  --bg:#ece2db;--card:#fff;--card2:#f6dfcc;--sep:#efefef;
+  --green:#dfeddd;--gdk:#3a7a45;--amber:#c07830;--red:#a83030;
+  --blue:#3a5a8a;--ink:#2a1f14;--ink2:#5a4535;--lbl:#8a7060;
+}
+
+.hdr{padding:10px 18px 0;}
+.hdr-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.app-title{font-size:24px;font-weight:800;color:var(--ink);letter-spacing:-.5px;line-height:1;}
+.field-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(42,31,20,.08);border:none;border-radius:8px;padding:4px 9px;margin-top:6px;cursor:pointer;}
+.field-pill span{font-size:12px;font-weight:600;color:var(--ink);}
+.field-pill em{font-size:11px;color:var(--lbl);font-style:normal;}
+.live-badge{display:flex;align-items:center;gap:4px;background:var(--ink);border-radius:20px;padding:3px 9px;}
+.live-dot-g{width:5px;height:5px;border-radius:50%;background:#8fe890;}
+.live-txt{font-size:10px;font-weight:700;color:#fff;letter-spacing:.05em;}
+.upd{font-size:10px;color:var(--lbl);margin-top:3px;text-align:right;}
+.alert{background:var(--card);border:1.5px solid var(--amber);border-radius:11px;padding:9px 12px;
+  margin:10px 0 0;display:flex;gap:9px;align-items:flex-start;}
+.alert-ico{font-size:20px;flex-shrink:0;}
+.alert-title{font-size:13px;font-weight:700;color:var(--amber);}
+.alert-sub{font-size:11px;color:var(--ink2);margin-top:1px;line-height:1.4;}
+.alert-num{font-size:22px;font-weight:800;color:var(--amber);line-height:1;}
+.tabs{display:flex;margin-top:12px;}
+.tab{flex:1;background:none;border:none;padding:9px 0;font-size:12px;color:var(--lbl);
+  border-bottom:2.5px solid transparent;cursor:pointer;transition:.15s;font-weight:400;}
+.tab.on{font-weight:700;color:var(--ink);border-color:var(--ink);}
+.slbl{font-size:11px;font-weight:700;color:var(--lbl);text-transform:uppercase;letter-spacing:.07em;padding:14px 16px 6px;}
+.cd{background:var(--card);border-radius:13px;overflow:hidden;margin:0 14px 11px;box-shadow:0 1px 4px rgba(80,50,20,.08);}
+.cd-hdr{padding:12px 14px 9px;border-bottom:1px solid var(--sep);}
+.cd-hdr-title{font-size:13px;font-weight:700;color:var(--ink);}
+.cd-hdr-sub{font-size:10px;color:var(--lbl);margin-top:1px;}
+.nsfi-body{padding:12px 14px 4px;display:flex;justify-content:space-between;align-items:center;}
+.nsfi-num{font-size:42px;font-weight:800;color:var(--red);line-height:1;}
+.gauge-wrap{padding:4px 14px 12px;}
+.gauge-track{position:relative;height:14px;border-radius:7px;overflow:hidden;
+  background:linear-gradient(90deg,rgba(168,48,48,.5) 0%,rgba(192,120,48,.5) 35%,rgba(58,122,69,.4) 70%,rgba(58,122,69,.4) 100%);}
+.gauge-p25{position:absolute;left:52.8%;top:0;bottom:0;width:2px;background:var(--amber);}
+.gauge-needle{position:absolute;top:50%;width:12px;height:12px;border-radius:50%;border:2px solid #fff;transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.2);}
+.gauge-lbls{display:flex;justify-content:space-between;margin-top:3px;}
+.gauge-lbls span{font-size:10px;color:var(--lbl);}
+.gauge-lbls .mid{font-size:10px;color:var(--amber);font-weight:600;}
+.wx-pills{display:flex;gap:7px;padding:10px 14px 14px;}
+.wx-pill{flex:1;background:var(--sep);border-radius:9px;padding:8px 5px;text-align:center;}
+.wx-ico{font-size:18px;margin-bottom:3px;}
+.wx-val{font-size:13px;font-weight:700;color:var(--ink);}
+.wx-lbl{font-size:9px;color:var(--lbl);margin-top:1px;}
+.hm-grid{display:flex;gap:2px;}
+.hm-col{flex:1;display:flex;flex-direction:column;gap:2px;}
+.hm-cell{height:10px;border-radius:2px;}
+.hm-day{font-size:8px;color:var(--lbl);text-align:center;margin-top:2px;}
+.hm-legend{display:flex;gap:10px;margin-top:8px;}
+.hm-leg{display:flex;align-items:center;gap:4px;font-size:10px;color:var(--lbl);}
+.hm-dot{width:8px;height:8px;border-radius:2px;}
+.fc-strip{display:flex;gap:6px;overflow-x:auto;padding:0 14px 14px;scrollbar-width:none;}
+.fc-strip::-webkit-scrollbar{display:none;}
+.fc-day{flex:0 0 58px;border-radius:10px;border:1.5px solid #d8d0c8;padding:8px 4px;text-align:center;background:var(--sep);}
+.fc-day.hot{background:#f5ddd8;border-color:var(--red);}
+.fc-day.rain{background:#ddeaf5;border-color:var(--blue);}
+.fc-day-lbl{font-size:9px;color:var(--lbl);margin-bottom:3px;}
+.fc-ico{font-size:19px;margin-bottom:3px;}
+.fc-temp{font-size:12px;font-weight:700;color:var(--ink);}
+.fc-mm{font-size:9px;color:var(--blue);margin-top:1px;}
+.sf-item{display:flex;gap:10px;padding:11px 14px;border-bottom:1px solid var(--sep);align-items:center;cursor:pointer;}
+.sf-ico{font-size:20px;flex-shrink:0;}
+.sf-title{flex:1;font-size:14px;font-weight:600;}
+.sf-badge{font-size:10px;font-weight:700;padding:2px 7px;border-radius:6px;}
+.mini-bar-row{display:flex;align-items:flex-end;gap:1px;height:28px;}
+.mini-bar{flex:1;border-radius:1px;}
+.dtree{padding:16px 14px 20px;display:flex;flex-direction:column;align-items:center;}
+.dnode{border:2px solid var(--gdk);border-radius:9px;padding:7px 14px;background:var(--green);font-size:12px;font-weight:700;color:var(--gdk);text-align:center;min-width:150px;max-width:210px;}
+.dnode.outcome{background:var(--card2);border-color:var(--amber);color:var(--amber);}
+.dconn{display:flex;flex-direction:column;align-items:center;position:relative;}
+.dline{width:2px;height:12px;background:var(--gdk);}
+.dpill{background:var(--gdk);border-radius:20px;padding:2px 10px;font-size:10px;font-weight:700;color:#fff;position:relative;cursor:default;z-index:2;}
+.dpill:hover .dtip{display:block;}
+.dtip{display:none;position:absolute;top:100%;left:50%;transform:translateX(-50%);margin-top:5px;background:var(--ink);color:#fff;font-size:10px;font-weight:400;border-radius:7px;padding:5px 9px;white-space:nowrap;z-index:50;box-shadow:0 3px 10px rgba(0,0,0,.25);}
+.rec-card{background:var(--card2);border:2px solid var(--amber);border-radius:13px;margin:0 14px 11px;padding:14px;display:flex;gap:11px;align-items:flex-start;}
+.rec-ico{font-size:28px;flex-shrink:0;}
+.rec-title{font-size:18px;font-weight:800;color:var(--amber);}
+.rec-body{font-size:12px;color:var(--ink2);margin-top:5px;line-height:1.6;}
+
+/* sub-pages */
+.sub-page{position:absolute;top:58px;left:0;right:0;bottom:0;border-radius:0 0 42px 42px;background:var(--bg);z-index:22;
+  opacity:0;pointer-events:none;transform:translateX(100%);
+  transition:opacity .3s ease,transform .3s ease;overflow:hidden;}
+.sub-page.visible{opacity:1;pointer-events:all;transform:translateX(0);}
+.sub-nav{background:var(--card2);padding:14px 16px 12px;border-bottom:1px solid #e0cfc0;display:flex;align-items:center;gap:10px;}
+.back-btn{background:none;border:none;cursor:pointer;display:flex;align-items:center;gap:4px;padding:0;}
+.sub-scroll{position:absolute;top:50px;left:0;right:0;bottom:0;overflow-y:auto;scrollbar-width:none;padding-bottom:20px;}
+.sub-scroll::-webkit-scrollbar{display:none;}
+.map-square{width:100%;aspect-ratio:1/1;position:relative;overflow:hidden;background:#d8e8d0;}
+
+.overlay-bg{position:absolute;inset:0;z-index:50;background:rgba(42,31,20,.45);
+  display:flex;align-items:flex-end;justify-content:center;border-radius:42px;
+  opacity:0;pointer-events:none;transition:opacity .2s;}
+.overlay-bg.visible{opacity:1;pointer-events:all;}
+.overlay-sheet{background:var(--card);border-radius:18px 18px 0 0;width:100%;
+  padding:20px 20px 36px;box-shadow:0 -4px 24px rgba(0,0,0,.15);
+  transform:translateY(20px);transition:transform .25s ease;}
+.overlay-bg.visible .overlay-sheet{transform:translateY(0);}
+.overlay-handle{width:36px;height:4px;border-radius:2px;background:var(--sep);margin:0 auto 18px;}
+.tab-panel{display:none;}
+.tab-panel.on{display:block;}
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="btn-vol-up"></div><div class="btn-vol-dn"></div><div class="btn-power"></div>
+  <div class="island"><div class="island-cam"></div></div>
+
+  <div class="screen">
+    <div class="reflection"></div>
+
+    <!-- HOME SCREEN -->
+    <div class="lockscreen" id="lockscreen">
+      <div class="ls-wallpaper"></div>
+      <div class="statusbar" style="position:absolute;">
+        <span style="font-size:15px;font-weight:700;color:#fff;letter-spacing:-.2px;">9:41</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="#fff"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="#fff"><path d="M8 9.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0-3.5a6 6 0 014.24 1.76l-1.42 1.42A4 4 0 008 8a4 4 0 00-2.83 1.17L3.76 7.76A6 6 0 018 6zm0-3.5a9.5 9.5 0 016.72 2.78l-1.42 1.42A7.5 7.5 0 008 4.5a7.5 7.5 0 00-5.3 2.2L1.28 5.28A9.5 9.5 0 018 2.5z" fill-rule="evenodd"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12" fill="#fff"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="#fff" stroke-width="1.2" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="#fff"/><path d="M22.5 4.5v3a1.5 1.5 0 000-3z"/></svg>
+        </div>
+      </div>
+      <div class="ls-time">9:41</div>
+      <div class="ls-date">Saturday, July 18</div>
+      <div class="home-grid">
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#1a7af0,#0a4eb0);">📷</div><div class="app-icon-lbl">Camera</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#f0a010,#e07000);">🗺️</div><div class="app-icon-lbl">Maps</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#34c759,#1a8f35);">💬</div><div class="app-icon-lbl">Messages</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#ff9500,#e06000);">🎵</div><div class="app-icon-lbl">Music</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#5ac8fa,#007aff);">🌤️</div><div class="app-icon-lbl">Weather</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#ff3b30,#c0280e);">❤️</div><div class="app-icon-lbl">Health</div></div>
+        <div class="app-icon" onclick="openApp()"><div class="app-icon-img" style="background:linear-gradient(135deg,#4a8a3a,#2d6a25);">🌱</div><div class="app-icon-lbl">PlantFit</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#8e8e93,#636366);">⚙️</div><div class="app-icon-lbl">Settings</div></div>
+      </div>
+      <div class="dock">
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#1a7af0,#0a4eb0);width:52px;height:52px;">📞</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#34c759,#1a8f35);width:52px;height:52px;">💬</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#ff9500,#e06000);width:52px;height:52px;">🌐</div></div>
+        <div class="app-icon"><div class="app-icon-img" style="background:linear-gradient(135deg,#5ac8fa,#007aff);width:52px;height:52px;">🎵</div></div>
+      </div>
+      <div class="notif-wrap" id="notifBanner" style="display:none;">
+        <div class="notif" onclick="openApp()">
+          <div class="notif-app-icon">🌱</div>
+          <div style="flex:1;">
+            <div class="notif-header">
+              <span class="notif-app-name">PlantFit</span>
+              <span class="notif-time">now</span>
+            </div>
+            <div class="notif-title">⚠️ Warning — Water Stress Detected</div>
+            <div class="notif-sub">Field A-1 · Soybean. Tap to take action.</div>
+          </div>
+        </div>
+      </div>
+      <div class="home-bar" style="background:rgba(255,255,255,.3);"></div>
+    </div>
+
+    <!-- APP SCREEN -->
+    <div class="appscreen" id="appscreen">
+      <div class="statusbar" style="z-index:30;">
+        <span style="font-size:15px;font-weight:700;color:#2a1f14;letter-spacing:-.2px;">9:41</span>
+        <div style="display:flex;align-items:center;gap:6px;">
+          <svg width="17" height="12" viewBox="0 0 17 12" fill="#2a1f14"><rect x="0" y="7" width="3" height="5" rx="1"/><rect x="4.5" y="5" width="3" height="7" rx="1"/><rect x="9" y="2.5" width="3" height="9.5" rx="1"/><rect x="13.5" y="0" width="3" height="12" rx="1"/></svg>
+          <svg width="16" height="12" viewBox="0 0 16 12" fill="#2a1f14"><path d="M8 9.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0-3.5a6 6 0 014.24 1.76l-1.42 1.42A4 4 0 008 8a4 4 0 00-2.83 1.17L3.76 7.76A6 6 0 018 6zm0-3.5a9.5 9.5 0 016.72 2.78l-1.42 1.42A7.5 7.5 0 008 4.5a7.5 7.5 0 00-5.3 2.2L1.28 5.28A9.5 9.5 0 018 2.5z" fill-rule="evenodd"/></svg>
+          <svg width="25" height="12" viewBox="0 0 25 12"><rect x="0" y="1" width="21" height="10" rx="2.5" stroke="#2a1f14" stroke-width="1.2" fill="none"/><rect x="1.5" y="2.5" width="16" height="7" rx="1.5" fill="#2a1f14"/><path d="M22.5 4.5v3a1.5 1.5 0 000-3z" fill="#2a1f14"/></svg>
+        </div>
+      </div>
+
+      <div class="app-scroll" id="mainScroll">
+        <div style="background:var(--bg);min-height:100%;">
+
+          <!-- STICKY HEADER -->
+          <div class="sticky-hdr">
+            <div class="hdr">
+              <div class="hdr-top">
+                <div>
+                  <div class="app-title">PlantFit</div>
+                  <button class="field-pill" onclick="toggleDD()">
+                    <span id="fieldLabel">Field A-1</span>
+                    <em id="plantLabel">· Soybean</em>
+                    <em style="font-size:9px;margin-left:2px;">▾</em>
+                  </button>
+                </div>
+                <div>
+                  <div class="live-badge"><div class="live-dot-g"></div><span class="live-txt">LIVE</span></div>
+                  <div class="upd">Updated 13:45</div>
+                </div>
+              </div>
+              <div class="alert">
+                <div class="alert-ico">⚠️</div>
+                <div style="flex:1;">
+                  <div class="alert-title">Warning — Water Stress Detected</div>
+                  <div class="alert-sub">Water stress detected for 2 consecutive days.</div>
+                </div>
+                <div style="text-align:right;flex-shrink:0;">
+                  <div class="alert-num">0.61</div>
+                </div>
+              </div>
+            </div>
+            <div class="tabs">
+              <button class="tab on"  onclick="switchTab(0,this)">Overview</button>
+              <button class="tab"     onclick="switchTab(1,this)">Why Stressed?</button>
+            </div>
+          </div>
+
+          <!-- ═══ OVERVIEW ═══ -->
+          <div class="tab-panel on" id="panel0">
+            <div class="slbl"></div>
+
+            <!-- Recommendation (from Decision) -->
+            <div class="rec-card" style="cursor:pointer;position:relative;" onclick="openDecisionLogic()">
+              <div style="position:absolute;top:14px;right:14px;font-size:15px;color:var(--lbl);">›</div>
+              <div class="rec-ico">🌦️</div>
+              <div>
+                <div class="rec-title">Apply Pulse Irrigation</div>
+                <div class="rec-body">Apply <strong>8–10mm now</strong> to relieve acute stress. Allow forecast drizzle to supplement on Tuesday.</div>
+              </div>
+            </div>
+
+            <!-- Field Location -->
+            <div class="cd" style="cursor:pointer;position:relative;" onclick="openMap()">
+              <div style="position:absolute;top:13px;right:14px;font-size:15px;color:var(--lbl);">›</div>
+              <div class="cd-hdr"><div class="cd-hdr-title">Field Location</div><div class="cd-hdr-sub">Field A-1 · Soybean · tap for map</div></div>
+            </div>
+
+            <!-- Sap Flow -->
+            <div class="cd" style="cursor:pointer;position:relative;" onclick="openDetail()">
+              <div style="position:absolute;top:13px;right:14px;font-size:15px;color:var(--lbl);">›</div>
+              <div class="cd-hdr"><div class="cd-hdr-title">Sap Flow</div><div class="cd-hdr-sub">Field A-1 · Soybean · tap for details</div></div>
+              <div class="nsfi-body">
+                <div class="nsfi-num">0.61</div>
+                <svg width="90" height="44" viewBox="0 0 90 44"><polyline points="0,4 7,6 14,8 21,10 28,14 35,18 42,20 49,22 56,25 63,28 70,30 77,34 84,37 90,41" fill="none" stroke="#c07830" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+              <div class="gauge-wrap">
+                <div class="gauge-track">
+                  <div class="gauge-p25"></div>
+                  <div class="gauge-needle" style="left:43.6%;background:var(--red);"></div>
+                </div>
+                <div class="gauge-lbls"><span>0.0</span><span class="mid">expected = 0.74</span><span>1.4</span></div>
+              </div>
+            </div>
+
+            <!-- Current Weather -->
+            <div class="cd">
+              <div class="cd-hdr"><div class="cd-hdr-title">Current Weather</div><div class="cd-hdr-sub">Jul 18, 13:45 · Field A-1</div></div>
+              <div class="wx-pills">
+                <div class="wx-pill"><div class="wx-ico">🌡️</div><div class="wx-val" style="color:var(--red)">38°C</div><div class="wx-lbl">Temp</div></div>
+                <div class="wx-pill"><div class="wx-ico">💧</div><div class="wx-val" style="color:var(--amber)">28%</div><div class="wx-lbl">Humidity</div></div>
+                <div class="wx-pill"><div class="wx-ico">💨</div><div class="wx-val" style="color:var(--amber)">18km/h</div><div class="wx-lbl">Wind</div></div>
+                <div class="wx-pill"><div class="wx-ico">☀️</div><div class="wx-val">High</div><div class="wx-lbl">Solar</div></div>
+              </div>
+            </div>
+
+            <!-- 48h Forecast -->
+            <div class="cd">
+              <div class="cd-hdr"><div class="cd-hdr-title">Future 48h Weather</div><div class="cd-hdr-sub">Hourly forecast · Jul 18–20</div></div>
+              <div style="padding-top:10px;">
+                <div class="fc-strip">
+                  <div class="fc-day hot"><div class="fc-day-lbl">Now</div><div class="fc-ico">☀️</div><div class="fc-temp">38°C</div></div>
+                  <div class="fc-day hot"><div class="fc-day-lbl">15:00</div><div class="fc-ico">☀️</div><div class="fc-temp">37°C</div></div>
+                  <div class="fc-day"><div class="fc-day-lbl">18:00</div><div class="fc-ico">🌤️</div><div class="fc-temp">34°C</div></div>
+                  <div class="fc-day"><div class="fc-day-lbl">21:00</div><div class="fc-ico">🌙</div><div class="fc-temp">28°C</div></div>
+                  <div class="fc-day"><div class="fc-day-lbl">00:00</div><div class="fc-ico">🌙</div><div class="fc-temp">25°C</div></div>
+                  <div class="fc-day"><div class="fc-day-lbl">06:00</div><div class="fc-ico">🌤️</div><div class="fc-temp">26°C</div></div>
+                  <div class="fc-day hot"><div class="fc-day-lbl">09:00</div><div class="fc-ico">☀️</div><div class="fc-temp">33°C</div></div>
+                  <div class="fc-day rain"><div class="fc-day-lbl">15:00</div><div class="fc-ico">🌦️</div><div class="fc-temp">31°C</div><div class="fc-mm">~2mm</div></div>
+                  <div class="fc-day rain"><div class="fc-day-lbl">18:00</div><div class="fc-ico">🌦️</div><div class="fc-temp">28°C</div><div class="fc-mm">~2mm</div></div>
+                </div>
+                <div style="padding:0 14px 12px;font-size:11px;color:var(--lbl);line-height:1.5;">Light rain Mon 15:00–18:00 (~4mm). Insufficient to fix the 14.8mm dry spell.</div>
+              </div>
+            </div>
+
+            <!-- 7-Day Stress Heatmap -->
+            <div class="cd">
+              <div class="cd-hdr"><div class="cd-hdr-title">7-Day Stress Heatmap</div><div class="cd-hdr-sub">Jul 12–18 · Hourly (6am–8pm)</div></div>
+              <div style="padding:10px 14px 14px;">
+                <div style="display:flex;gap:6px;">
+                  <!-- Time axis: only 6 and 20 -->
+                  <div style="display:flex;flex-direction:column;justify-content:space-between;flex-shrink:0;">
+                    <span style="font-size:8px;color:var(--lbl);line-height:1;">6am</span>
+                    <span style="font-size:8px;color:var(--lbl);line-height:1;">8pm</span>
+                  </div>
+                  <div style="flex:1;">
+                    <div class="hm-grid" id="hmGrid"></div>
+                  </div>
+                </div>
+                <div class="hm-legend" style="margin-left:14px;">
+                  <div class="hm-leg"><div class="hm-dot" style="background:#dfeddd;"></div>Normal</div>
+                  <div class="hm-leg"><div class="hm-dot" style="background:#f6dfcc;"></div>Watch</div>
+                  <div class="hm-leg"><div class="hm-dot" style="background:#c85040;"></div>Stress</div>
+                </div>
+              </div>
+            </div>
+            <div style="height:16px;"></div>
+          </div>
+
+          <!-- ═══ WHY STRESSED ═══ -->
+          <div class="tab-panel" id="panel1">
+            <div class="slbl">Active Stress Factors</div>
+            <div class="cd">
+              <div class="sf-item" onclick="openOverlay('🌡️','Extreme Heat — 3+ Days','3 days of 36–38°C heat (Jul 16–18) is forcing plants to shut down to save water.','ACTIVE','#f0d8d8','var(--red)')">
+                <div class="sf-ico">🌡️</div><div class="sf-title" style="color:var(--red)">Extreme Heat — 3+ Days</div>
+                <div class="sf-badge" style="background:#f0d8d8;border:1px solid var(--red);color:var(--red)">ACTIVE</div>
+                <span style="font-size:14px;color:var(--lbl);margin-left:4px;">›</span>
+              </div>
+              <div class="sf-item" onclick="openOverlay('🌵','Dry Soil','Only 3mm of rain in 2 weeks (15mm below normal). Your roots are now 15mm short on water.','ACTIVE','#f0d8d8','var(--red)')">
+                <div class="sf-ico">🌵</div><div class="sf-title" style="color:var(--red)">Dry Soil</div>
+                <div class="sf-badge" style="background:#f0d8d8;border:1px solid var(--red);color:var(--red)">ACTIVE</div>
+                <span style="font-size:14px;color:var(--lbl);margin-left:4px;">›</span>
+              </div>
+              <div class="sf-item" onclick="openOverlay('💨','High Wind Stress','Steady 17 km/h winds over 3 days are sucking moisture out of the leaves faster than normal.','WATCH','var(--card2)','var(--amber)')">
+                <div class="sf-ico">💨</div><div class="sf-title" style="color:var(--amber)">High Wind Stress</div>
+                <div class="sf-badge" style="background:var(--card2);border:1px solid var(--amber);color:var(--amber)">WATCH</div>
+                <span style="font-size:14px;color:var(--lbl);margin-left:4px;">›</span>
+              </div>
+              <div class="sf-item" style="cursor:default;opacity:.6;">
+                <div class="sf-ico">☁️</div><div class="sf-title" style="color:var(--lbl)">Low Sunlight</div>
+                <div class="sf-badge" style="background:var(--sep);color:var(--lbl)">CLEAR</div>
+              </div>
+            </div>
+
+            <div class="slbl">Past 14 Days — Weather</div>
+            <div class="cd">
+              <div style="padding:13px 14px 6px;">
+                <div style="margin-bottom:13px;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--lbl);">Max Temp °C</span><span style="font-size:12px;font-weight:600;color:var(--ink2);">38°C</span></div>
+                  <div class="mini-bar-row" id="tempBars1"></div>
+                </div>
+                <div style="margin-bottom:13px;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--lbl);">Humidity %</span><span style="font-size:12px;font-weight:600;color:var(--ink2);">28%</span></div>
+                  <div class="mini-bar-row" id="rhBars"></div>
+                </div>
+                <div style="margin-bottom:13px;">
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--lbl);">Precipitation mm</span><span style="font-size:12px;font-weight:600;color:var(--ink2);">0mm</span></div>
+                  <div class="mini-bar-row" id="precipBars1"></div>
+                </div>
+                <div>
+                  <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span style="font-size:12px;color:var(--lbl);">Wind km/h</span><span style="font-size:12px;font-weight:600;color:var(--ink2);">18</span></div>
+                  <div class="mini-bar-row" id="windBars"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="slbl">Hydration Score Decline</div>
+            <div class="cd" style="background:var(--card2);">
+              <div style="padding:14px;display:flex;align-items:center;justify-content:space-between;">
+                <div><div style="font-size:12px;color:var(--lbl);margin-bottom:4px;">14-day trend</div><div style="font-size:26px;font-weight:800;color:var(--red);">−37%</div><div style="font-size:11px;color:var(--lbl);">0.98 → 0.61</div></div>
+                <svg width="130" height="50" viewBox="0 0 130 50"><polyline points="0,4 10,6 20,8 30,10 40,15 50,20 60,24 70,27 80,31 90,35 100,39 110,42 120,46 130,50" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+            <div style="height:16px;"></div>
+          </div>
+
+          <!-- ═══ DECISION ═══ -->
+          <div class="tab-panel" id="panel2">
+            <div class="slbl">Decision Logic</div>
+            <div class="cd">
+              <div class="dtree">
+                <div class="dnode">Is water intake in the bottom 25%?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">0.61 vs. threshold 0.74</div></div><div class="dline"></div></div>
+                <div class="dnode">Stressed 2+ days?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">38 consecutive hours below P25</div></div><div class="dline"></div></div>
+                <div class="dnode">Rain ≥10mm within 24h?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">No<div class="dtip">Scenario A ruled out</div></div><div class="dline"></div></div>
+                <div class="dnode">Light drizzle (3–5mm) in 48h?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">~4mm Tuesday, 40% probability</div></div><div class="dline"></div></div>
+                <div class="dnode outcome">→ Pulse Irrigation</div>
+              </div>
+            </div>
+            <div style="height:16px;"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── SUB-PAGE: DECISION LOGIC (from Recommendation tap) ── -->
+      <div class="sub-page" id="decisionLogicPage">
+        <div class="sub-nav">
+          <button class="back-btn" onclick="closeDecisionLogic()"><span style="font-size:18px;color:var(--blue);">‹</span><span style="font-size:15px;color:var(--blue);">Back</span></button>
+          <div style="flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-right:40px;">Decision Logic</div>
+        </div>
+        <div class="sub-scroll">
+          <div style="padding:14px 14px 0;">
+            <div class="cd" style="margin:0 0 11px;">
+              <div class="cd-hdr"><div class="cd-hdr-title">Decision Logic</div><div class="cd-hdr-sub">Hover each step for details</div></div>
+              <div class="dtree">
+                <div class="dnode">Is water intake in the bottom 25%?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">0.61 vs. threshold 0.74</div></div><div class="dline"></div></div>
+                <div class="dnode">Stressed 2+ days?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">38 consecutive hours below P25</div></div><div class="dline"></div></div>
+                <div class="dnode">Rain ≥10mm within 24h?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">No<div class="dtip">Scenario A ruled out</div></div><div class="dline"></div></div>
+                <div class="dnode">Light drizzle (3–5mm) in 48h?</div>
+                <div class="dconn"><div class="dline"></div><div class="dpill">Yes<div class="dtip">~4mm Tuesday, 40% probability</div></div><div class="dline"></div></div>
+                <div class="dnode outcome">→ Pulse Irrigation</div>
+              </div>
+            </div>
+          </div>
+          <div style="height:20px;"></div>
+        </div>
+      </div>
+
+      <!-- ── SUB-PAGE: MAP ── -->
+      <div class="sub-page" id="mapPage">
+        <div class="sub-nav">
+          <button class="back-btn" onclick="closeMap()"><span style="font-size:18px;color:var(--blue);">‹</span><span style="font-size:15px;color:var(--blue);">Back</span></button>
+          <div style="flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-right:40px;">Field Location</div>
+        </div>
+        <div class="sub-scroll">
+          <div style="padding:14px 14px 0;">
+            <div class="cd" style="margin:0 0 11px;">
+              <div class="cd-hdr"><div class="cd-hdr-title">Field A-1</div><div class="cd-hdr-sub">Soybean · 575 acres · Bondville, IL</div></div>
+              <div class="map-square" style="position:relative;">
+                <img src="A-1 location.png" alt="Field A-1 Location" style="width:100%;height:100%;object-fit:cover;display:block;"/>
+              </div>
+              <div style="display:flex;justify-content:space-between;padding:11px 14px;border-top:1px solid var(--sep);">
+                <div><div style="font-size:10px;color:var(--lbl);">Latitude</div><div style="font-size:13px;font-weight:600;color:var(--ink);">40.0592° N</div></div>
+                <div style="text-align:center;"><div style="font-size:10px;color:var(--lbl);">Area</div><div style="font-size:13px;font-weight:600;color:var(--ink);">575 acres</div></div>
+                <div style="text-align:right;"><div style="font-size:10px;color:var(--lbl);">Longitude</div><div style="font-size:13px;font-weight:600;color:var(--ink);">88.1985° W</div></div>
+              </div>
+            </div>
+            <div class="cd" style="margin:0;">
+              <div class="cd-hdr"><div class="cd-hdr-title">Yield Overview</div></div>
+              <div style="padding:0 14px 4px;">
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--sep);">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--gdk);flex-shrink:0;"></div>
+                  <div style="flex:1;font-size:13px;color:var(--ink2);">High Yield</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--gdk);">50%</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--sep);">
+                  <div style="width:10px;height:10px;border-radius:50%;background:#c8a020;flex-shrink:0;"></div>
+                  <div style="flex:1;font-size:13px;color:var(--ink2);">Mid Yield</div>
+                  <div style="font-size:13px;font-weight:700;color:#c8a020;">30%</div>
+                </div>
+                <div style="display:flex;align-items:center;gap:10px;padding:11px 0;">
+                  <div style="width:10px;height:10px;border-radius:50%;background:var(--red);flex-shrink:0;"></div>
+                  <div style="flex:1;font-size:13px;color:var(--ink2);">Low Yield</div>
+                  <div style="font-size:13px;font-weight:700;color:var(--red);">20%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="height:20px;"></div>
+        </div>
+      </div>
+
+      <!-- ── SUB-PAGE: NSFI DETAIL ── -->
+      <div class="sub-page" id="detailPage">
+        <div class="sub-nav">
+          <button class="back-btn" onclick="closeDetail()"><span style="font-size:18px;color:var(--blue);">‹</span><span style="font-size:15px;color:var(--blue);">Back</span></button>
+          <div style="flex:1;text-align:center;font-size:15px;font-weight:700;color:var(--ink);margin-right:40px;">Sap Flow Index</div>
+        </div>
+        <div class="sub-scroll">
+          <div style="padding:14px 14px 0;">
+            <div class="cd" style="margin:0 0 11px;">
+              <div class="cd-hdr"><div class="cd-hdr-title">Trailing NSFI · Today vs. Calibration Baseline</div><div class="cd-hdr-sub">Field A-1 · Soybean · Jul 18</div></div>
+              <div style="display:flex;gap:12px;flex-wrap:wrap;padding:8px 14px 4px;">
+                <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--lbl);"><div style="width:16px;height:3px;background:#3a7a45;border-radius:2px;"></div>Today</div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--lbl);"><div style="width:16px;height:9px;background:rgba(45,106,53,.18);border:1px solid rgba(45,106,53,.3);border-radius:2px;"></div>P25–P75</div>
+                <div style="display:flex;align-items:center;gap:5px;font-size:10px;color:var(--lbl);"><svg width="18" height="6"><line x1="0" y1="3" x2="18" y2="3" stroke="#c07830" stroke-width="1.5" stroke-dasharray="4,2"/></svg>Expected</div>
+              </div>
+              <div style="height:190px;padding:4px 8px 8px;"><canvas id="nsfiCanvas"></canvas></div>
+              <div style="margin:0 14px 14px;background:#fff8f0;border:1px solid var(--amber);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;align-items:center;">
+                <div><div style="font-size:10px;color:var(--lbl);">Current</div><div style="font-size:26px;font-weight:800;color:var(--red);line-height:1;">0.61</div></div>
+                <div style="text-align:right;"><div style="font-size:10px;color:var(--lbl);">Expected (P25)</div><div style="font-size:17px;font-weight:700;color:var(--amber);">0.74</div><div style="font-size:10px;color:var(--red);margin-top:1px;">18th percentile ↓</div></div>
+              </div>
+            </div>
+            <div class="cd" style="margin:0;background:var(--green);">
+              <div style="padding:14px;">
+                <div style="font-size:11px;font-weight:700;color:var(--gdk);text-transform:uppercase;letter-spacing:.05em;margin-bottom:7px;">About NSFI</div>
+                <div style="font-size:13px;font-weight:700;color:var(--ink);margin-bottom:7px;line-height:1.5;">NSFI = Sap Flow ÷ [α·Solar + β·VPD + γ·Wind]</div>
+                <div style="font-size:12px;color:var(--ink2);line-height:1.65;">Values below P25 indicate stomatal closure beyond normal variation. NSFI = 1.0 means the plant transpires exactly as expected for current conditions.</div>
+              </div>
+            </div>
+          </div>
+          <div style="height:20px;"></div>
+        </div>
+      </div>
+
+      <!-- STRESS FACTOR OVERLAY -->
+      <div class="overlay-bg" id="overlayBg" onclick="closeOverlay()">
+        <div class="overlay-sheet" onclick="event.stopPropagation()">
+          <div class="overlay-handle"></div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+            <span style="font-size:28px;" id="ovIco"></span>
+            <div style="flex:1;">
+              <div style="font-size:17px;font-weight:700;" id="ovTitle"></div>
+              <div style="display:inline-block;margin-top:5px;border-radius:6px;padding:2px 8px;" id="ovBadge"></div>
+            </div>
+          </div>
+          <div style="font-size:13px;color:var(--ink2);line-height:1.7;background:var(--sep);border-radius:12px;padding:13px 15px;" id="ovDetail"></div>
+          <button onclick="closeOverlay()" style="margin-top:16px;width:100%;background:var(--ink);border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;">Close</button>
+        </div>
+      </div>
+
+      <!-- Field dropdown -->
+      <div id="ddMenu" style="display:none;position:absolute;top:110px;left:32px;background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.18);z-index:60;min-width:175px;overflow:hidden;">
+        <div onclick="selectField('A-1','Soybean')" style="padding:11px 15px;font-size:14px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--sep);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">Field A-1 <span style="font-size:12px;color:var(--lbl);">Soybean</span><span id="ck1" style="color:var(--gdk);">✓</span></div>
+        <div onclick="selectField('A-2','Corn')"    style="padding:11px 15px;font-size:14px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--sep);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">Field A-2 <span style="font-size:12px;color:var(--lbl);">Corn</span><span id="ck2" style="color:var(--gdk);display:none;">✓</span></div>
+        <div onclick="selectField('A-3','Corn')"    style="padding:11px 15px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;display:flex;justify-content:space-between;align-items:center;">Field A-3 <span style="font-size:12px;color:var(--lbl);">Corn</span><span id="ck3" style="color:var(--gdk);display:none;">✓</span></div>
+      </div>
+
+      <div class="home-bar" style="background:rgba(42,31,20,.25);"></div>
+    </div><!-- end appscreen -->
+
+  </div><!-- end screen -->
+</div><!-- end phone -->
+
+<div class="phone-label">iPhone 17 · PlantFit</div>
+
+<script>
+// ── Notification
+setTimeout(()=>{ document.getElementById('notifBanner').style.display='block'; }, 1200);
+
+// ── Open app
+function openApp(){
+  const n=document.getElementById('notifBanner');
+  n.style.opacity='0'; n.style.transition='opacity .25s';
+  setTimeout(()=>{ n.style.display='none'; },250);
+  document.getElementById('appscreen').classList.add('visible');
+  buildAllBars(); buildHeatmap();
+}
+
+// ── Tabs
+function switchTab(i,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('panel'+i).classList.add('on');
+  document.getElementById('mainScroll').scrollTop=0;
+}
+
+// ── Sub-pages
+function openDecisionLogic(){ document.getElementById('decisionLogicPage').classList.add('visible'); }
+function closeDecisionLogic(){ document.getElementById('decisionLogicPage').classList.remove('visible'); }
+let _leafletMap = null;
+function openMap(){
+  document.getElementById('mapPage').classList.add('visible');
+}
+function closeMap(){ document.getElementById('mapPage').classList.remove('visible'); }
+function initLeafletMap(){
+  if(_leafletMap){ _leafletMap.invalidateSize(); drawCompass(); return; }
+  const lat=40.0592, lng=-88.1985;
+  _leafletMap = L.map('leafletMap', {
+    center:[lat,lng], zoom:14,
+    zoomControl:false, attributionControl:false
+  });
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',{
+    maxZoom:19
+  }).addTo(_leafletMap);
+  const dLat=0.0068, dLng=0.012;
+  const bounds=[[lat-dLat,lng-dLng],[lat+dLat,lng+dLng]];
+  L.rectangle(bounds,{color:'#ffffff',weight:2.5,fillColor:'#3a7a45',fillOpacity:0.18}).addTo(_leafletMap);
+  const sensors=[
+    {pos:[lat-dLat+0.001,lng-dLng+0.002],id:'S1',amber:false},
+    {pos:[lat-dLat+0.001,lng+dLng-0.002],id:'S2',amber:false},
+    {pos:[lat+dLat-0.001,lng-dLng+0.002],id:'S3',amber:false},
+    {pos:[lat+dLat-0.001,lng+dLng-0.002],id:'S4',amber:true}
+  ];
+  sensors.forEach(s=>{
+    const color=s.amber?'#c07830':'#3a7a45';
+    const icon=L.divIcon({className:'',html:`<div style="width:18px;height:18px;border-radius:50%;background:${color};border:2px solid #fff;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;color:#fff;box-shadow:0 1px 3px rgba(0,0,0,.4);">${s.id}</div>`,iconSize:[18,18],iconAnchor:[9,9]});
+    L.marker(s.pos,{icon}).addTo(_leafletMap);
+  });
+  const labelIcon=L.divIcon({className:'',html:`<div style="background:rgba(255,255,255,0.92);padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;color:#3a7a45;white-space:nowrap;box-shadow:0 1px 4px rgba(0,0,0,.3);">Field A-1</div>`,iconAnchor:[30,10]});
+  L.marker([lat,lng],{icon:labelIcon}).addTo(_leafletMap);
+  drawCompass();
+}
+function drawCompass(){
+  const canvas=document.getElementById('compassCanvas');
+  if(!canvas) return;
+  const ctx=canvas.getContext('2d');
+  const cx=18,cy=18,cr=16;
+  ctx.clearRect(0,0,36,36);
+  ctx.fillStyle='rgba(255,255,255,0.82)';
+  ctx.beginPath(); ctx.arc(cx,cy,cr,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#2a1f14'; ctx.font='bold 8px -apple-system,sans-serif'; ctx.textAlign='center';
+  ctx.fillText('N',cx,cy-5);
+  ctx.fillStyle='#8a7060';
+  ctx.fillText('S',cx,cy+12);
+  ctx.fillText('W',cx-7,cy+4);
+  ctx.fillText('E',cx+7,cy+4);
+}
+function openDetail(){ document.getElementById('detailPage').classList.add('visible'); setTimeout(drawNsfi,60); }
+function closeDetail(){ document.getElementById('detailPage').classList.remove('visible'); }
+
+// ── Overlay
+function openOverlay(ico,title,detail,badge,bgColor,color){
+  document.getElementById('ovIco').textContent=ico;
+  document.getElementById('ovTitle').textContent=title;
+  document.getElementById('ovTitle').style.color=color;
+  document.getElementById('ovDetail').textContent=detail;
+  const b=document.getElementById('ovBadge');
+  b.textContent=badge; b.style.background=bgColor; b.style.color=color; b.style.border=`1px solid ${color}`;
+  document.getElementById('overlayBg').classList.add('visible');
+}
+function closeOverlay(){ document.getElementById('overlayBg').classList.remove('visible'); }
+
+// ── Dropdown
+function toggleDD(){ const m=document.getElementById('ddMenu'); m.style.display=m.style.display==='none'?'block':'none'; }
+function selectField(f,p){
+  document.getElementById('fieldLabel').textContent='Field '+f;
+  document.getElementById('plantLabel').textContent='· '+p;
+  ['ck1','ck2','ck3'].forEach(id=>document.getElementById(id).style.display='none');
+  document.getElementById({'A-1':'ck1','A-2':'ck2','A-3':'ck3'}[f]).style.display='inline';
+  document.getElementById('ddMenu').style.display='none';
+}
+
+// ── Data
+const temps=[28,29,30,28,27,31,33,30,29,32,35,36,37,38];
+const prec= [0,0,2.1,0,1.1,0,0,0,0,0,0,0,0,0];
+const rh=   [60,57,55,62,65,48,44,53,56,42,32,30,29,28];
+const wind= [8,10,9,7,6,12,15,11,10,14,17,18,16,18];
+
+function buildBars(id,vals,maxV,hlFn,hlColor){
+  const el=document.getElementById(id);
+  if(!el||el.children.length>0) return;
+  vals.forEach(v=>{
+    const b=document.createElement('div'); b.className='mini-bar';
+    b.style.height=Math.max(2,(v/maxV)*28)+'px';
+    b.style.background=hlFn(v)?hlColor:'#d8cfc8';
+    el.appendChild(b);
+  });
+}
+function buildAllBars(){
+  buildBars('tempBars1',temps,42,v=>v>=30,'#a83030');
+  buildBars('rhBars',rh,80,v=>v<=40,'#a83030');
+  buildBars('precipBars1',prec,5,v=>v>0,'#3a5a8a');
+  buildBars('windBars',wind,22,v=>v>=15,'#a83030');
+}
+
+// ── Heatmap
+function buildHeatmap(){
+  const grid=document.getElementById('hmGrid');
+  if(grid.children.length>0) return;
+  const colors=["#dfeddd","#e8e8c0","#f6dfcc","#f0c8a8","#e8a888","#d88060","#c85040"];
+  ["12","13","14","15","16","17","18"].forEach((d,di)=>{
+    const col=document.createElement('div'); col.className='hm-col';
+    for(let hi=0;hi<8;hi++){
+      const c=document.createElement('div'); c.className='hm-cell';
+      c.style.background=colors[di]; c.style.opacity=(di>=4&&hi>=2&&hi<=5)?.95:.45;
+      col.appendChild(c);
+    }
+    const lbl=document.createElement('div'); lbl.className='hm-day'; lbl.textContent=d;
+    col.appendChild(lbl); grid.appendChild(col);
+  });
+}
+
+// ── Map canvas
+
+
+// ── NSFI chart
+function drawNsfi(){
+  const canvas=document.getElementById('nsfiCanvas');
+  if(!canvas) return;
+  const W=canvas.offsetWidth||330,H=canvas.offsetHeight||182;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=W*dpr; canvas.height=H*dpr;
+  canvas.style.width=W+'px'; canvas.style.height=H+'px';
+  const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+  const PAD={top:8,right:8,bottom:22,left:28};
+  const cw=W-PAD.left-PAD.right,ch=H-PAD.top-PAD.bottom;
+  const n=96,minY=0,maxY=1.4;
+  const xOf=i=>PAD.left+(i/(n-1))*cw;
+  const yOf=v=>PAD.top+ch-((v-minY)/(maxY-minY))*ch;
+  const p25=[],p75=[],today=[];
+  for(let i=0;i<n;i++){
+    const t=i/4,base=Math.max(0,Math.sin((t-6)*Math.PI/12))*.35+.7;
+    p25.push(base*.76); p75.push(base*1.22);
+    today.push(base*(t>9&&t<18?.72:.94)+(Math.random()-.5)*.012);
+  }
+  [0,.4,.8,1.2].forEach(v=>{
+    ctx.strokeStyle='rgba(26,20,16,.06)'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(PAD.left,yOf(v)); ctx.lineTo(PAD.left+cw,yOf(v)); ctx.stroke();
+    ctx.fillStyle='#8a7060'; ctx.font='8px -apple-system,sans-serif'; ctx.textAlign='right';
+    ctx.fillText(v.toFixed(1),PAD.left-3,yOf(v)+3);
+  });
+  ['06:00','12:00','18:00'].forEach((l,i)=>{
+    const xi=[0,24,48][i];
+    ctx.fillStyle='#8a7060'; ctx.font='8px -apple-system,sans-serif'; ctx.textAlign='center';
+    ctx.fillText(l,xOf(xi),H-PAD.bottom+11);
+  });
+  ctx.beginPath();
+  p75.forEach((v,i)=>i===0?ctx.moveTo(xOf(i),yOf(v)):ctx.lineTo(xOf(i),yOf(v)));
+  p25.slice().reverse().forEach((v,i)=>ctx.lineTo(xOf(n-1-i),yOf(v)));
+  ctx.closePath(); ctx.fillStyle='rgba(45,106,53,.13)'; ctx.fill();
+  ctx.strokeStyle='rgba(192,120,48,.75)'; ctx.lineWidth=1.5; ctx.setLineDash([4,3]);
+  ctx.beginPath(); p25.forEach((v,i)=>i===0?ctx.moveTo(xOf(i),yOf(v)):ctx.lineTo(xOf(i),yOf(v))); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.strokeStyle='#3a7a45'; ctx.lineWidth=2;
+  ctx.beginPath(); today.forEach((v,i)=>i===0?ctx.moveTo(xOf(i),yOf(v)):ctx.lineTo(xOf(i),yOf(v))); ctx.stroke();
+  ctx.beginPath(); ctx.arc(xOf(n-1),yOf(today[n-1]),5,0,Math.PI*2);
+  ctx.fillStyle='#a83030'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1.5; ctx.stroke();
+}
+</script>
+</body>
+</html>

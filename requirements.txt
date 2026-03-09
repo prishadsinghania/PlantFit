@@ -1,0 +1,15 @@
+# Core (run_irrigation_model.py)
+pandas>=2.0
+numpy>=1.24
+scikit-learn>=1.3
+joblib>=1.3
+
+# Zone plotting (zone management/plot_bondville_zones.py)
+matplotlib>=3.7
+folium>=0.15
+
+# Zone clustering from TIFF (zone management/zoning_satellite/zones.py)
+rasterio>=1.3
+
+# Optional: fixes SSL cert errors on some macOS Python installs
+certifi>=2023.0
