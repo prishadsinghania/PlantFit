@@ -1,6 +1,6 @@
 # PlantFit: Precision Irrigation Management
 
-**We propose a novel data-driven crop management system designed to optimize irrigation schedules using real-time weather data, ET API, sap flow levels and predictive modeling. 
+*We propose a novel data-driven crop management system designed to optimize irrigation schedules using real-time weather data, ET API, sap flow levels and predictive modeling.*
 This project integrates atmospheric forecasts with plant-specific metrics to ensure efficient water usage and optimal growth for popcorn crops.
 
 **Problem Statement:** Crops are thirsty and we often know too late. This causes great loss in productivity. We integrate a minimum invasive crop sap flow sensor to see the “pulse of the crop” and combine it with environmental data and forecasts to provide irrigation advice and answer questions like "when should i water the plant" and "how much should the plant be watered".
