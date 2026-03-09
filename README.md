@@ -104,9 +104,7 @@ python run_irrigation_model.py
 ### App Dashboard Prototype
 
 To view the conceptual UI for this system, open `plantfit_prototype.html` in any web browser. This dashboard provides a visual representation of soil moisture levels and plant health trends.
-
-<img width="380" height="795" alt="image" src="https://github.com/user-attachments/assets/115f680d-0a68-42a7-a980-2d7c1aff8cf6" />
-
+<img width="796" height="1600" alt="image" src="https://github.com/user-attachments/assets/fd9c3147-5acd-4bcf-b63f-e671efe8f1a5" />
 
 ---
 
