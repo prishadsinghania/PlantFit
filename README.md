@@ -1,4 +1,4 @@
-# Illini Popcorn: Precision Irrigation Management
+# PlantFit: Precision Irrigation Management
 
 **Illini Popcorn** is a data-driven crop management system designed to optimize irrigation schedules using real-time weather data, soil moisture tracking, and predictive modeling. This project integrates atmospheric forecasts with plant-specific metrics to ensure efficient water usage and optimal growth for popcorn crops.
 
