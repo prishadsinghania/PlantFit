@@ -101,9 +101,12 @@ python run_irrigation_model.py
 - **Model Calibration:** The `trained_baseline.csv` file serves as the ground truth for "healthy" crop behavior. Updating this allows the model to adapt to different corn hybrids.
     
 
-### Web Dashboard Prototype
+### App Dashboard Prototype
 
 To view the conceptual UI for this system, open `plantfit_prototype.html` in any web browser. This dashboard provides a visual representation of soil moisture levels and plant health trends.
+
+<img width="380" height="795" alt="image" src="https://github.com/user-attachments/assets/115f680d-0a68-42a7-a980-2d7c1aff8cf6" />
+
 
 ---
 
