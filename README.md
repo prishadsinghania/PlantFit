@@ -1,22 +1,19 @@
 # PlantFit: Precision Irrigation Management
 
-**Illini Popcorn** is a data-driven crop management system designed to optimize irrigation schedules using real-time weather data, soil moisture tracking, and predictive modeling. This project integrates atmospheric forecasts with plant-specific metrics to ensure efficient water usage and optimal growth for popcorn crops.
+** We propose a novel data-driven crop management system designed to optimize irrigation schedules using real-time weather data, ET API, sap flow levels and predictive modeling. 
+This project integrates atmospheric forecasts with plant-specific metrics to ensure efficient water usage and optimal growth for popcorn crops.
 
-**Problem Statement:** crops are thirsty and we often know too late. This causes great loss in productivity. We integrate a minimum invasive crop sap flow sensor to see the “pulse of the crop” and combine it with environmental data and forecasts to provide irrigation advice.
-
-**Slides link**
-
-https://www.canva.com/design/DAHDUa_mb_k/ZtJyqwhUFieBbm6MgpgB7g/edit
+**Problem Statement:** Crops are thirsty and we often know too late. This causes great loss in productivity. We integrate a minimum invasive crop sap flow sensor to see the “pulse of the crop” and combine it with environmental data and forecasts to provide irrigation advice and answer questions like "when should i water the plant" and "how much should the plant be watered".
 
 **Team Member**
 
-Ximin Pian - xpiao2@illinois.edu, UIUC, (PhD candidate in CEE)
+Prisha Singhania - pds4@illinois.edu, UIUC, (MSIM’26 Grad Student)
 
 Priyal Maniar - priyalm2@illinois.edu, UIUC, (MSIM’26 Grad Student)
 
-Prisha Singhania - pds4@illinois.edu, UIUC, (MSIM’26 Grad Student)
-
 Yuyang Liu - yuyang19@illinois.edu, UIUC, (MSIM’27 Grad Student)
+
+Ximin Pian - xpiao2@illinois.edu, UIUC, (PhD candidate in CEE)
 
 ## 🚀 Key Features
 
@@ -66,7 +63,7 @@ Yuyang Liu - yuyang19@illinois.edu, UIUC, (MSIM’27 Grad Student)
     Bash
     
     ```
-    git clone https://github.com/PriyalManiar/illini_popcorn.git
+    git clone https://github.com/prishadsinghania/PlantFit
     cd illini_popcorn
     ```
     
